@@ -14,6 +14,62 @@ class _DashboardPageState extends State<DashboardPage>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
 
+  List<FoodItems> searchHistory = <FoodItems>[];
+
+  Iterable<Widget> getHistoryList(SearchController controller) {
+    return searchHistory.map(
+          (FoodItems foodItems) => ListTile(
+        leading: const Icon(Icons.history),
+        title: Text(foodItems.name),
+        trailing: IconButton(
+          icon: const Icon(Icons.call_missed),
+          onPressed: () {
+            controller.text = foodItems.name;
+            controller.selection = TextSelection.collapsed(offset: controller.text.length);
+          },
+        ),
+      ),
+    );
+  }
+
+  Iterable<Widget> getSuggestions(SearchController controller) {
+    final String input = controller.value.text;
+    return FoodItems.values
+        .where((FoodItems item) => item.name.toLowerCase().contains(input.toLowerCase()))
+        .map(
+          (FoodItems filteredItem) => ListTile(
+        leading: CircleAvatar(foregroundImage: AssetImage(filteredItem.img),),
+        title: Text(filteredItem.name),
+        trailing: IconButton(
+          icon: const Icon(Icons.call_missed),
+          onPressed: () {
+            controller.text = filteredItem.name;
+            controller.selection = TextSelection.collapsed(offset: controller.text.length);
+          },
+        ),
+        onTap: () {
+          controller.closeView(filteredItem.name);
+          handleSelection(filteredItem);
+        },
+      ),
+    );
+  }
+
+  void handleSelection(FoodItems selectedFoodItem) {
+    setState(() {
+
+      if (searchHistory.length >= 5) {
+        searchHistory.removeLast();
+      }
+      searchHistory.insert(0, selectedFoodItem);
+
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => BurgerPage(heroTag: selectedFoodItem.name, foodName: selectedFoodItem.name, pricePerItem: selectedFoodItem.price, imgPath: selectedFoodItem.img)
+      ));
+    }
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -37,7 +93,7 @@ class _DashboardPageState extends State<DashboardPage>
                 decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),//.withValues(alpha: 0.3),
+                          color: Colors.grey.withValues(alpha: 0.3),
                           blurRadius: 6.0,
                           spreadRadius: 4.0,
                           offset: Offset(0.0, 3.0))
@@ -62,7 +118,7 @@ class _DashboardPageState extends State<DashboardPage>
         Padding(
           padding: const EdgeInsets.only(left: 15.0),
           child: Text(
-            'RECIPES',
+            'FOOD',
             style: GoogleFonts.notoSans(
                 fontWeight: FontWeight.w800, fontSize: 27.0),
           ),
@@ -73,16 +129,45 @@ class _DashboardPageState extends State<DashboardPage>
             child: Container(
                 padding: EdgeInsets.only(left: 5.0),
                 decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.1),
+                    color: Colors.grey.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10.0)),
-                child: TextField(
-                  decoration: InputDecoration(
-                      hintText: 'Search',
-                      hintStyle: GoogleFonts.notoSans(fontSize: 14.0),
-                      border: InputBorder.none,
-                      fillColor: Colors.grey.withOpacity(0.5),
-                      prefixIcon: Icon(Icons.search, color: Colors.grey)),
-                ))),
+                child:
+                SearchAnchor.bar(
+                  barHintText: 'Search Food',
+                  barHintStyle: WidgetStatePropertyAll(GoogleFonts.notoSans(fontSize: 14.0)),
+                  barTextStyle: WidgetStatePropertyAll(GoogleFonts.notoSans(fontSize: 14.0)),
+                  suggestionsBuilder: (BuildContext context, SearchController controller) {
+                    if (controller.text.isEmpty) {
+                      if (searchHistory.isNotEmpty) {
+                        return getHistoryList(controller);
+                      }
+                      return <Widget>[
+                        Center(
+                          child: Text(
+                            'No search history.',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                      ];
+                    }
+                    return getSuggestions(controller);
+                  },
+
+
+
+                ),
+                // TextField(
+                //   // controller: ,
+                //
+                //   decoration: InputDecoration(
+                //       hintText: 'Search',
+                //       hintStyle: GoogleFonts.notoSans(fontSize: 14.0),
+                //       border: InputBorder.none,
+                //       fillColor: Colors.grey.withValues(alpha: 0.5),
+                //       prefixIcon: Icon(Icons.search, color: Colors.grey)),
+                // )
+            )
+        ),
         SizedBox(height: 20.0),
         Padding(
           padding: const EdgeInsets.only(left: 15.0),
@@ -93,14 +178,14 @@ class _DashboardPageState extends State<DashboardPage>
           ),
         ),
         SizedBox(height: 15.0),
-        Container(
+        SizedBox(
             height: 200.0,
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: <Widget>[
                 _buildListItem('Hamburg', 'assets/burger.png', '21',
                     Color(0xFFFFE9C6), Color(0xFFDA9551)),
-                _buildListItem('Chips', 'assets/fries.png', '15',
+                _buildListItem('French Fries', 'assets/fries.png', '15',
                     Color(0xFFC2E3FE), Color(0xFF6A8CAA)),
                 _buildListItem('Donuts', 'assets/doughnut.png', '15',
                     Color(0xFFD7FADA), Color(0xFF56CC7E)),
@@ -114,7 +199,7 @@ class _DashboardPageState extends State<DashboardPage>
                 isScrollable: true,
                 indicatorColor: Colors.transparent,
                 labelColor: Colors.black,
-                unselectedLabelColor: Colors.grey.withOpacity(0.5),
+                unselectedLabelColor: Colors.grey.withValues(alpha: 0.5),
                 labelStyle: GoogleFonts.notoSans(
                     fontSize: 16.0, fontWeight: FontWeight.w700),
                 unselectedLabelStyle: GoogleFonts.notoSans(
@@ -125,7 +210,7 @@ class _DashboardPageState extends State<DashboardPage>
                   Tab(child: Text('FAVORITES')),
                   Tab(child: Text('RECOMMENDED')),
                 ])),
-        Container(
+        SizedBox(
             height: MediaQuery.of(context).size.height - 450.0,
             child: TabBarView(controller: tabController, children: [
               FoodTab(),
@@ -178,4 +263,28 @@ class _DashboardPageState extends State<DashboardPage>
                   ],
                 ))));
   }
+}
+
+enum FoodItems {
+  hamburger('Super Hamburger', 'assets/burger.png', '21'),
+  fries('Super French Fries', 'assets/fries.png', '15'),
+  donuts('Super Donuts', 'assets/doughnut.png', '15');
+  // green('green', Colors.green),
+  // blue('blue', Colors.blue),
+  // indigo('indigo', Colors.indigo),
+  // violet('violet', Color(0xFF8F00FF)),
+  // purple('purple', Colors.purple),
+  // pink('pink', Colors.pink),
+  // silver('silver', Color(0xFF808080)),
+  // gold('gold', Color(0xFFFFD700)),
+  // beige('beige', Color(0xFFF5F5DC)),
+  // brown('brown', Colors.brown),
+  // grey('grey', Colors.grey),
+  // black('black', Colors.black),
+  // white('white', Colors.white);
+
+  const FoodItems(this.name, this.img, this.price);
+  final String name;
+  final String img;
+  final String price;
 }

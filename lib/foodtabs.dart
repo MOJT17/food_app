@@ -5,7 +5,6 @@ import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.da
 class FoodTab extends StatefulWidget {
   const FoodTab({super.key});
 
-
   @override
   State<FoodTab> createState() => _FoodTabState();
 }
@@ -29,7 +28,7 @@ class _FoodTabState extends State<FoodTab> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             SizedBox(
-                width: 300.0,
+                width: 220.0,
                 child: Row(children: [
                   Container(
                       height: 75.0,
@@ -73,7 +72,7 @@ class _FoodTabState extends State<FoodTab> {
                                 decoration: TextDecoration.lineThrough,
                                 fontWeight: FontWeight.w600,
                                 textStyle: TextStyle(
-                                    color: Colors.grey.withOpacity(0.4))),
+                                    color: Colors.grey.withValues(alpha: 0.4))),
                           )
                         ],
                       )
