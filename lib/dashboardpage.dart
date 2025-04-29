@@ -152,20 +152,7 @@ class _DashboardPageState extends State<DashboardPage>
                     }
                     return getSuggestions(controller);
                   },
-
-
-
                 ),
-                // TextField(
-                //   // controller: ,
-                //
-                //   decoration: InputDecoration(
-                //       hintText: 'Search',
-                //       hintStyle: GoogleFonts.notoSans(fontSize: 14.0),
-                //       border: InputBorder.none,
-                //       fillColor: Colors.grey.withValues(alpha: 0.5),
-                //       prefixIcon: Icon(Icons.search, color: Colors.grey)),
-                // )
             )
         ),
         SizedBox(height: 20.0),
