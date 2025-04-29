@@ -269,19 +269,6 @@ enum FoodItems {
   hamburger('Super Hamburger', 'assets/burger.png', '21'),
   fries('Super French Fries', 'assets/fries.png', '15'),
   donuts('Super Donuts', 'assets/doughnut.png', '15');
-  // green('green', Colors.green),
-  // blue('blue', Colors.blue),
-  // indigo('indigo', Colors.indigo),
-  // violet('violet', Color(0xFF8F00FF)),
-  // purple('purple', Colors.purple),
-  // pink('pink', Colors.pink),
-  // silver('silver', Color(0xFF808080)),
-  // gold('gold', Color(0xFFFFD700)),
-  // beige('beige', Color(0xFFF5F5DC)),
-  // brown('brown', Colors.brown),
-  // grey('grey', Colors.grey),
-  // black('black', Colors.black),
-  // white('white', Colors.white);
 
   const FoodItems(this.name, this.img, this.price);
   final String name;
