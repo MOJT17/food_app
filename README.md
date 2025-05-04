@@ -1,3 +1,3 @@
-# Food Order App
+# Food App
 
-Simple flutter app to order food
+Simple flutter app to view and search for food
