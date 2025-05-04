@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_order_app/dashboardpage.dart';
+import 'package:food_order_app/dashboard_page.dart';
 
 void main() => runApp(MyApp());
 

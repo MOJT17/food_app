@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:food_order_app/burgerpage.dart';
+import 'package:food_order_app/food_item_page.dart';
 import 'package:food_order_app/foodtabs.dart';
+import 'package:food_order_app/food_items.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -252,13 +253,3 @@ class _DashboardPageState extends State<DashboardPage>
   }
 }
 
-enum FoodItems {
-  hamburger('Super Hamburger', 'assets/burger.png', '21'),
-  fries('Super French Fries', 'assets/fries.png', '15'),
-  donuts('Super Donuts', 'assets/doughnut.png', '15');
-
-  const FoodItems(this.name, this.img, this.price);
-  final String name;
-  final String img;
-  final String price;
-}
